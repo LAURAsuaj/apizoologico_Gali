@@ -11,7 +11,6 @@ router.post("/animals", (req, res) => {
 });
 router.get("/animals", (req, res) => {
     animalSchema.find()
-
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }));
 });
