@@ -1,8 +1,9 @@
+const verifyToken = require('./validate_token');
 const express = require("express");
 const router = express.Router(); //manejador de rutas de express
 const animalSchema = require("../models/animal");
 //Nuevo animal
-router.post("/animals", (req, res) => {
+router.post("/animals", verifyToken, (req, res) => {
     const animal = animalSchema(req.body);
     animal
         .save()
@@ -10,13 +11,13 @@ router.post("/animals", (req, res) => {
         .catch((error) => res.json({ message: error }));
 });
 //Consultar todos los animales
-router.get("/animals", (req, res) => {
+router.get("/animals", verifyToken, (req, res) => {
     animalSchema.find()
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }));
 });
 //Consultar un animal por su id
-router.get("/animals/:id", (req, res) => {
+router.get("/animals/:id", verifyToken, (req, res) => {
     const { id } = req.params;
     animalSchema
         .findById(id)
@@ -25,7 +26,7 @@ router.get("/animals/:id", (req, res) => {
 });
 
 //Modificar el nombre de un animal por su id
-router.put("/animals/:id", (req, res) => {
+router.put("/animals/:id", verifyToken, (req, res) => {
     const { id } = req.params;
     const { nombre, edad, tipo, fecha } = req.body;
     animalSchema
@@ -38,7 +39,7 @@ router.put("/animals/:id", (req, res) => {
 
 //Eliminar un animal por su id
 
-router.delete("/animals/:id", (req, res) => {
+router.delete("/animals/:id", verifyToken, (req, res) => {
     const { id } = req.params;
     animalSchema
         .findByIdAndDelete(id)
@@ -50,4 +51,10 @@ router.delete("/animals/:id", (req, res) => {
         });
 });
 
+//Consultar todos los animales 
+router.get("/animals", verifyToken, (req, res) => {
+    animalSchema.find()
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
+});
 module.exports = router;
